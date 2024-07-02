@@ -103,19 +103,6 @@ function createStyleSheet() {
     overflow: hidden;
     display: none; /* Ensure the chat popup is initially hidden */
   }
-  @media (max-width: 768px) {
-    #chat-popup {
-      position: fixed;
-      top: 0;
-      right: 0;
-      bottom: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      max-height: 100%;
-      border-radius: 0;
-    }
-  }
   #chat-bubble {
     width: 4rem;
     height: 4rem;
@@ -135,8 +122,8 @@ function createStyleSheet() {
   }
   #chat-popup {
     position: absolute;
-    bottom: 20px;
-    right: 0;
+    bottom: 70px;
+    right: -10px;
     width: 24rem; /* Tailwind w-96 */
     background-color: #fff; /* Tailwind bg-white */
     border-radius: 0.375rem; /* Tailwind rounded-md */
@@ -261,7 +248,7 @@ function createHTMLWidget(chatName) {
           <button id="chat-submit">Send</button>
         </div>
         <div class="text-center">
-          <span>Prompted by <a href="https://twitter.com/anantrp" target="_blank">@antonbjorkman</a></span>
+          <span>AI by <a href="www.linkedin.com/in/anton-björkman-447a1a1b1" target="_blank">@antonbjorkman</a></span>
         </div>
       </div>
     </div>

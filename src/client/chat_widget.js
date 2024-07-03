@@ -96,26 +96,16 @@ function createStyleSheet() {
     display: flex;
     flex-direction: column;
 }
-#chat-popup {
-    height: 70vh;
-    max-height: 70vh;
-    transition: all 0.3s;
-    overflow: hidden;
-    display: none; /* Ensure the chat popup is initially hidden */
-}
 #chat-bubble {
     width: 4rem;
     height: 4rem;
-    background-color: #C3C3C3; /* Light gray */
-    border: 2px solid #808080; /* Dark gray */
-    border-radius: 50%;
+    /*background-color: #C3C3C3; *//* Light gray */
     display: flex;
     align-items: center;
     justify-content: center;
     cursor: pointer;
     font-size: 1.875rem;
     z-index: 1000;
-    box-shadow: 2px 2px 5px #808080, -2px -2px 5px #FFFFFF; /* Beveled effect */
     transition: transform 0.3s;
 }
 #chat-bubble:hover {
@@ -127,17 +117,22 @@ function createStyleSheet() {
     color: #000; /* Black */
 }
 #chat-popup {
+    width: max-content;
+    height: 70vh;
+    max-height: 70vh;
+    transition: all 0.3s;
+    overflow: hidden;
+    display: none; /* Ensure the chat popup is initially hidden */
     position: absolute;
     bottom: 70px;
     right: -10px;
-    width: 24rem;
     background-color: #C3C3C3;
     border: 2px solid #808080;
-    box-shadow: 2px 2px 5px #808080, -2px -2px 5px #FFFFFF; /* Beveled effect */
+    /*box-shadow: 2px 2px 5px #808080, -2px -2px 5px #FFFFFF;* /* Beveled effect */
     display: flex;
     flex-direction: column;
     transition: all 0.3s;
-    font-size: 0.875rem; /* Tailwind text-sm */
+    font-size: 0.875rem;
     z-index: 1001;
 }
 #chat-header {
@@ -212,13 +207,13 @@ function createStyleSheet() {
 }
 #chat-input-container .text-center {
     text-align: center;
-    font-size: 0.75rem; /* Tailwind text-xs */
-    padding-top: 0.5rem; /* Tailwind pt-4 */
+    font-size: 0.75rem; 
+    padding-top: 0.5rem;
     font-family: 'MS Sans Serif', 'Arial', sans-serif; /* Windows 95 font */
 }
 .message-container {
     display: flex;
-    margin-bottom: 0.75rem; /* Tailwind mb-3 */
+    margin-bottom: 0.75rem;
 }
 .message-container.user {
     justify-content: flex-end;
@@ -232,13 +227,17 @@ function createStyleSheet() {
     border-radius: 2px; /* Slightly rounded for Windows 95 look */
     padding: 0.5rem 1rem; /* Tailwind py-2 px-4 */
     max-width: 70%;
-    box-shadow: 2px 2px 5px #808080, -2px -2px 5px #FFFFFF; /* Beveled effect */
+    /*box-shadow: 2px 2px 5px #808080, -2px -2px 5px #FFFFFF; *//* Beveled effect */
     font-family: 'MS Sans Serif', 'Arial', sans-serif; /* Windows 95 font */
 }
 .message.reply {
     background-color: #FFFFFF; /* White */
     color: #000; /* Black */
-    box-shadow: 2px 2px 5px #FFFFFF, -2px -2px 5px #808080; /* Beveled effect */
+   /* box-shadow: 2px 2px 5px #FFFFFF, -2px -2px 5px #808080;*/ /* Beveled effect */
+   /* Base styles remain as provided */
+
+
+
 }
 
   `;
@@ -256,26 +255,7 @@ function createHTMLWidget(chatName) {
   // Inject the HTML
   chatWidgetContainer.innerHTML = `
     <div id="chat-bubble">
-      <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" 
-	 viewBox="0 0 512 512" xml:space="preserve">
-<path style="fill:#93C7EF;" d="M302.545,69.818c0-25.707-20.84-46.545-46.545-46.545s-46.545,20.838-46.545,46.545
-	c0,17.225,9.365,32.254,23.273,40.304v83.818h46.545v-83.818C293.181,102.073,302.545,87.043,302.545,69.818z"/>
-<path style="fill:#5A8BB0;" d="M256,23.273v170.667h23.273v-83.818c13.908-8.049,23.273-23.077,23.273-40.304
-	C302.545,44.111,281.705,23.273,256,23.273z"/>
-<rect y="240.485" style="fill:#93C7EF;" width="248.242" height="124.121"/>
-<rect x="263.758" y="240.485" style="fill:#5A8BB0;" width="248.242" height="124.121"/>
-<rect x="186.182" y="364.606" style="fill:#93C7EF;" width="139.636" height="124.121"/>
-<rect x="256" y="364.606" style="fill:#5A8BB0;" width="69.818" height="124.121"/>
-<rect x="46.545" y="162.909" style="fill:#CCE9F9;" width="418.909" height="279.273"/>
-<rect x="256" y="162.909" style="fill:#93C7EF;" width="209.455" height="279.273"/>
-<path style="fill:#3C5D76;" d="M193.939,271.515c0,17.138-13.894,31.03-31.03,31.03l0,0c-17.136,0-31.03-13.892-31.03-31.03l0,0
-	c0-17.138,13.894-31.03,31.03-31.03l0,0C180.046,240.485,193.939,254.377,193.939,271.515L193.939,271.515z"/>
-<path style="fill:#1E2E3B;" d="M380.121,271.515c0,17.138-13.894,31.03-31.03,31.03l0,0c-17.137,0-31.03-13.892-31.03-31.03l0,0
-	c0-17.138,13.894-31.03,31.03-31.03l0,0C366.227,240.485,380.121,254.377,380.121,271.515L380.121,271.515z"/>
-<path style="fill:#3C5D76;" d="M186.182,349.091c0,38.558,31.258,69.818,69.818,69.818l0,0c38.558,0,69.818-31.26,69.818-69.818
-	H186.182z"/>
-<path style="fill:#1E2E3B;" d="M256,349.091c0,38.558,0,46.545,0,69.818l0,0c38.558,0,69.818-31.26,69.818-69.818H256z"/>
-</svg>
+     <img src="https://api.dicebear.com/9.x/bottts-neutral/svg?seed=Maggie&backgroundColor=00897b,43a047,00acc1,039be5,1e88e5,3949ab,546e7a,5e35b1,6d4c41&backgroundType[]&eyes=robocop&mouth=smile01" alt="avatar" />
     </div>
     <div id="chat-popup" class="hidden" style="display: none;">
       <div id="chat-header">

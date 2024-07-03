@@ -50,8 +50,6 @@
   }
 
   async function onUserRequest(message) {
-    console.log('User request:', message);
-
     const messageElement = document.createElement('div');
     messageElement.className = 'message-container user';
     messageElement.innerHTML = `
@@ -63,34 +61,16 @@
     chatMessages.scrollTop = chatMessages.scrollHeight;
     chatInput.value = '';
 
-    const myHeaders = new Headers();
-    myHeaders.append("Content-Type", "application/json");
-
-    const raw = JSON.stringify({
-      "model": "qwen2:0.5b",
-      "prompt": message,
-      "stream": false
-    });
-
-    const requestOptions = {
-      method: "POST",
-      headers: myHeaders,
-      body: raw,
-      redirect: "follow"
-    };
-
-    console.log('Sending request')
-    const response = (await fetch("http://localhost:11434/api/generate", requestOptions));
-    const body = await response.json();
-    console.log({body});
-    reply(body.response)
+    const body = await promptAI(message);
+    const guidID = generateUUID()
+    reply(body.response, guidID)
   }
 
-  function reply(message) {
+  function reply(message, guidID) {
     const replyElement = document.createElement('div');
     replyElement.className = 'message-container reply';
     replyElement.innerHTML = `
-      <div class="message reply">
+      <div class="message reply" id="${guidID}">
         ${message}
       </div>
     `;
@@ -99,6 +79,43 @@
   }
 })();
 
+async function promptAI(message) {
+  const myHeaders = new Headers();
+  myHeaders.append("Content-Type", "application/json");
+
+  const raw = JSON.stringify({
+    "model": "qwen2:0.5b",
+    "prompt": message,
+    "stream": false
+  });
+
+  const requestOptions = {
+    method: "POST",
+    headers: myHeaders,
+    body: raw,
+    redirect: "follow"
+  };
+
+  const response = (await fetch("http://localhost:11434/api/generate", requestOptions));
+  const body = await response.json();
+  return body;
+}
+
+function generateUUID() { // Public Domain/MIT
+  var d = new Date().getTime();//Timestamp
+  var d2 = ((typeof performance !== 'undefined') && performance.now && (performance.now() * 1000)) || 0;//Time in microseconds since page-load or 0 if unsupported
+  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+    var r = Math.random() * 16;//random number between 0 and 16
+    if (d > 0) {//Use timestamp until depleted
+      r = (d + r) % 16 | 0;
+      d = Math.floor(d / 16);
+    } else {//Use microseconds since page-load if supported
+      r = (d2 + r) % 16 | 0;
+      d2 = Math.floor(d2 / 16);
+    }
+    return (c === 'x' ? r : (r & 0x3 | 0x8)).toString(16);
+  });
+}
 
 //#region CSS
 function createStyleSheet() {
@@ -253,12 +270,7 @@ function createStyleSheet() {
     color: #000; /* Black */
    /* box-shadow: 2px 2px 5px #FFFFFF, -2px -2px 5px #808080;*/ /* Beveled effect */
    /* Base styles remain as provided */
-
-
-
-}
-
-  `;
+}`;
 
   document.head.appendChild(style);
 }

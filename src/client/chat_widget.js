@@ -61,9 +61,19 @@
     chatMessages.scrollTop = chatMessages.scrollHeight;
     chatInput.value = '';
 
-    const body = await promptAI(message);
+
     const guidID = generateUUID()
+
+    const body = await promptAI(message);
     reply(body.response, guidID)
+
+    /*
+    let currentResponse = "";
+    const stream = await promptAI(message);
+      for chunk in stream
+        currentResponse += body.response;
+        reply(body.response, guidID)
+    */
   }
 
   function reply(message, guidID) {
@@ -130,11 +140,11 @@ function createStyleSheet() {
     right: 20px;
     display: flex;
     flex-direction: column;
+    z-index:999
 }
 #chat-bubble {
     width: 4rem;
     height: 4rem;
-    /*background-color: #C3C3C3; *//* Light gray */
     display: flex;
     align-items: center;
     justify-content: center;
@@ -142,6 +152,11 @@ function createStyleSheet() {
     font-size: 1.875rem;
     z-index: 1000;
     transition: transform 0.3s;
+    border-radius: 5px;
+}
+#chat-bubble img{
+    z-index: 1000;
+    border-radius: inherit;
 }
 #chat-bubble:hover {
     transform: scale(1.1);
@@ -160,10 +175,12 @@ function createStyleSheet() {
     display: none; /* Ensure the chat popup is initially hidden */
     position: absolute;
     bottom: 70px;
-    right: -10px;
+    right: 0px;
     background-color: #C3C3C3;
-    border: 2px solid #808080;
-    /*box-shadow: 2px 2px 5px #808080, -2px -2px 5px #FFFFFF;* /* Beveled effect */
+    border-top: 2px solid #F0F0F0; /* Windows White */
+    border-left: 2px solid #F0F0F0; /* Windows White */
+    border-right: 2px solid #111111; /* Windows Black */
+    border-bottom: 2px solid #111111; /* Windows Black */
     display: flex;
     flex-direction: column;
     transition: all 0.3s;
@@ -174,68 +191,97 @@ function createStyleSheet() {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 0.5rem 1rem; /* Tailwind p-4 */
+    padding: 0.5rem 1rem; 
     background-color: #000080; /* Navy blue */
-    color: #fff; /* Tailwind text-white */
-    border-bottom: 2px solid #808080; /* Dark gray */
+    color: #fff; 
     font-family: 'MS Sans Serif', 'Arial', sans-serif; /* Windows 95 font */
 }
 #chat-header h3 {
     margin: 0;
-    font-size: 1.125rem; /* Tailwind text-lg */
+    font-size: 1.125rem; 
 }
 #close-popup {
-    background: transparent;
-    border: none;
-    color: #fff; /* Tailwind text-white */
+    background-color: #C3C3C3; /* Light gray */
+    color: #000; /* Black */
+    border-top: 2px solid #F0F0F0; /* Windows White */
+    border-left: 2px solid #F0F0F0; /* Windows White */
+    border-right: 2px solid #111111; /* Windows Black */
+    border-bottom: 2px solid #111111; /* Windows Black */
     cursor: pointer;
+    transition: background-color 0.3s;
+    font-family: 'MS Sans Serif', 'Arial', sans-serif; /* Windows 95 font */
+    
 }
 #close-popup svg {
-    height: 1.5rem; /* Tailwind h-6 */
-    width: 1.5rem; /* Tailwind w-6 */
+    height: 1rem;
+    width: 1rem; 
+}
+#close-popup:focus {
+    border-top: 2px dotted #8F8F8F; /* Windows Black */
+    border-left: 2px dotted #8F8F8F; /* Windows Black */
+    border-right: 2px dotted #8F8F8F; /* Windows White */
+    border-bottom: 2px dotted #8F8F8F; /* Windows White */
+    outline: solid;
 }
 #chat-messages {
     flex: 1;
-    padding: 0.5rem; /* Tailwind p-4 */
+    padding: 0.5rem; 
     overflow-y: auto;
     background-color: #008282; /* Windows Green */
     font-family: 'MS Sans Serif', 'Arial', sans-serif; /* Windows 95 font */
-    border-top: 2px solid #808080; /* Dark gray */
+    border-top: 2px solid #8F8F8F; /* Windows Black */
+    border-left: 2px solid #8F8F8F; /* Windows Black */
+    border-right: 2px solid #F0F0F0; /* Windows White */
+    border-bottom: 2px solid #F0F0F0; /* Windows White */
 }
 #chat-input-container {
-    padding: 0.5rem 1rem; /* Tailwind p-4 */
+    padding: 0.5rem 1rem; 
     border-top: 2px solid #808080; /* Dark gray */
     background-color: #C3C3C3; /* Light gray */
 }
 #chat-input-container .flex {
     display: flex;
     align-items: center;
-    gap: 0.5rem; /* Tailwind space-x-4 */
+    gap: 0.5rem;
 }
 #chat-input {
     flex: 1;
-    border: 2px solid #808080; /* Dark gray */
-    border-radius: 2px; /* Slightly rounded for Windows 95 look */
-    padding: 0.5rem 1rem; /* Tailwind px-4 py-2 */
+    border-top: 2px solid #8F8F8F; /* Windows Black */
+    border-left: 2px solid #8F8F8F; /* Windows Black */
+    border-right: 2px solid #F0F0F0; /* Windows White */
+    border-bottom: 2px solid #F0F0F0; /* Windows White */
+    padding: 0.5rem 1rem; 
     outline: none;
     width: 75%; /* Tailwind w-3/4 */
     background-color: #FFFFFF; /* White */
-    box-shadow: inset 2px 2px 5px #FFFFFF, inset -2px -2px 5px #808080; /* Inset beveled effect */
     font-family: 'MS Sans Serif', 'Arial', sans-serif; /* Windows 95 font */
 }
 #chat-input:focus {
-    border-color: #000080; /* Navy blue */
+    border-top: 2px dotted #8F8F8F; /* Windows Black */
+    border-left: 2px dotted #8F8F8F; /* Windows Black */
+    border-right: 2px dotted #8F8F8F; /* Windows White */
+    border-bottom: 2px dotted #8F8F8F; /* Windows White */
+    outline: solid;
 }
 #chat-submit {
     background-color: #C3C3C3; /* Light gray */
     color: #000; /* Black */
-    border: 2px solid #808080; /* Dark gray */
-    border-radius: 2px; /* Slightly rounded for Windows 95 look */
-    padding: 0.5rem 1rem; /* Tailwind px-4 py-2 */
+    border-top: 2px solid #F0F0F0; /* Windows White */
+    border-left: 2px solid #F0F0F0; /* Windows White */
+    border-right: 2px solid #111111; /* Windows Black */
+    border-bottom: 2px solid #111111; /* Windows Black */
+    padding: 0.5rem 1rem;
     cursor: pointer;
-    box-shadow: 2px 2px 5px #FFFFFF, -2px -2px 5px #808080; /* Beveled effect */
+    /*box-shadow: 2px 2px 5px #FFFFFF, -2px -2px 5px #808080; *//* Beveled effect */
     transition: background-color 0.3s;
     font-family: 'MS Sans Serif', 'Arial', sans-serif; /* Windows 95 font */
+}
+#chat-submit:focus {
+    border-top: 2px dotted #8F8F8F; /* Windows Black */
+    border-left: 2px dotted #8F8F8F; /* Windows Black */
+    border-right: 2px dotted #8F8F8F; /* Windows White */
+    border-bottom: 2px dotted #8F8F8F; /* Windows White */
+    outline: solid;
 }
 #chat-submit:hover {
     background-color: #808080; /* Dark gray */
@@ -291,7 +337,7 @@ function createHTMLWidget(chatName) {
       <div id="chat-header">
         <h3>${chatName}</h3>
         <button id="close-popup">
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3">
             <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
           </svg>
         </button>

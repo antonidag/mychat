@@ -131,12 +131,15 @@ function generateUUID() { // Public Domain/MIT
 function createStyleSheet() {
   const style = document.createElement('style');
   style.innerHTML = `
- .hidden {
+  .hidden {
     display: none;
 }
 @font-face {
-  font-family: myFirstFont;
-  src: url(./fonts/MS_Sans_Serif_8pt.ttf);
+    font-family: 'Windows 95';
+    src: url('src/client/fonts/w-95-sans-serif.woff2') format('woff2'),
+        url('src/client/fonts/w-95-sans-serif.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
 }
 #chat-widget-container {
     position: fixed;
@@ -145,7 +148,7 @@ function createStyleSheet() {
     display: flex;
     flex-direction: column;
     z-index:999;
-    font-family: myFirstFont;
+    font-family: "Windows 95", sans-serif;
 }
 #chat-bubble {
     width: 4rem;
@@ -158,6 +161,7 @@ function createStyleSheet() {
     z-index: 1000;
     transition: transform 0.3s;
     border-radius: 5px;
+    font-family: "Windows 95", sans-serif;
 }
 #chat-bubble img{
     z-index: 1000;
@@ -191,18 +195,21 @@ function createStyleSheet() {
     transition: all 0.3s;
     font-size: 0.875rem;
     z-index: 1001;
+    font-family: "Windows 95", sans-serif;
 }
 #chat-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 0.5rem 1rem; 
     background-color: #000080; /* Navy blue */
     color: #fff; 
+    font-family: "Windows 95", sans-serif;
+    padding: 0.5rem 1rem; 
 }
 #chat-header h3 {
     margin: 0;
     font-size: 1.125rem; 
+    font-family: "Windows 95", sans-serif;
 }
 #close-popup {
     background-color: #C3C3C3; /* Light gray */
@@ -213,6 +220,8 @@ function createStyleSheet() {
     border-bottom: 2px solid #111111; /* Windows Black */
     cursor: pointer;
     transition: background-color 0.3s;
+    font-family: "Windows 95", sans-serif;
+    padding: 0.2rem;
 }
 #close-popup svg {
     height: 1rem;
@@ -220,19 +229,20 @@ function createStyleSheet() {
 }
 #chat-messages {
     flex: 1;
-    padding: 0.5rem; 
     overflow-y: auto;
     background-color: #008282; /* Windows Green */
-    font-family: 'MS Sans Serif', 'Arial', sans-serif; /* Windows 95 font */
     border-top: 2px solid #8F8F8F; /* Windows Black */
     border-left: 2px solid #8F8F8F; /* Windows Black */
     border-right: 2px solid #F0F0F0; /* Windows White */
     border-bottom: 2px solid #F0F0F0; /* Windows White */
+    font-family: "Windows 95", sans-serif;
+    padding: 0.5rem 1rem; 
 }
 #chat-input-container {
-    padding: 0.5rem 1rem; 
     border-top: 2px solid #808080; /* Dark gray */
     background-color: #C3C3C3; /* Light gray */
+    font-family: "Windows 95", sans-serif;
+    padding: 0.5rem 1rem; 
 }
 #chat-input-container .flex {
     display: flex;
@@ -245,10 +255,10 @@ function createStyleSheet() {
     border-left: 2px solid #8F8F8F; /* Windows Black */
     border-right: 2px solid #F0F0F0; /* Windows White */
     border-bottom: 2px solid #F0F0F0; /* Windows White */
-    padding: 0.5rem 1rem; 
     outline: none;
     width: 75%; /* Tailwind w-3/4 */
     background-color: #FFFFFF; /* White */
+    font-family: "Windows 95", sans-serif;
 }
 #chat-submit {
     background-color: #C3C3C3; /* Light gray */
@@ -257,9 +267,10 @@ function createStyleSheet() {
     border-left: 2px solid #F0F0F0; /* Windows White */
     border-right: 2px solid #111111; /* Windows Black */
     border-bottom: 2px solid #111111; /* Windows Black */
-    padding: 0.5rem 1rem;
     cursor: pointer;
     transition: background-color 0.3s;
+    font-family: "Windows 95", sans-serif;
+    padding: 0.5rem 1rem; 
 }
 #chat-submit:focus, #chat-input:focus, #close-popup:focus {
     border-top: 2px dotted #8F8F8F; /* Windows Black */
@@ -274,7 +285,6 @@ function createStyleSheet() {
 #chat-input-container .text-center {
     text-align: center;
     font-size: 0.75rem; 
-    padding-top: 0.5rem;
 }
 .message-container {
     display: flex;
@@ -293,12 +303,13 @@ function createStyleSheet() {
     border-left: 2px solid #F0F0F0; /* Windows White */
     border-right: 2px solid #111111; /* Windows Black */
     border-bottom: 2px solid #111111; /* Windows Black */
-    padding: 0.5rem 1rem; /* Tailwind py-2 px-4 */
     max-width: 70%;
+    padding: 0.5rem 1rem; 
 }
 .message.reply {
     background-color: #FFFFFF; /* White */
     color: #000; /* Black */
+    padding: 0.5rem 1rem; 
 }`;
 
   document.head.appendChild(style);
@@ -320,9 +331,7 @@ function createHTMLWidget(chatName) {
       <div id="chat-header">
         <h3>${chatName}</h3>
         <button id="close-popup">
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
-          </svg>
+          <span>X</span>
         </button>
       </div>
       <div id="chat-messages"></div>

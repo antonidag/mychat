@@ -216,13 +216,6 @@ function createStyleSheet() {
     height: 1rem;
     width: 1rem; 
 }
-#close-popup:focus {
-    border-top: 2px dotted #8F8F8F; /* Windows Black */
-    border-left: 2px dotted #8F8F8F; /* Windows Black */
-    border-right: 2px dotted #8F8F8F; /* Windows White */
-    border-bottom: 2px dotted #8F8F8F; /* Windows White */
-    outline: solid;
-}
 #chat-messages {
     flex: 1;
     padding: 0.5rem; 
@@ -256,13 +249,6 @@ function createStyleSheet() {
     background-color: #FFFFFF; /* White */
     font-family: 'MS Sans Serif', 'Arial', sans-serif; /* Windows 95 font */
 }
-#chat-input:focus {
-    border-top: 2px dotted #8F8F8F; /* Windows Black */
-    border-left: 2px dotted #8F8F8F; /* Windows Black */
-    border-right: 2px dotted #8F8F8F; /* Windows White */
-    border-bottom: 2px dotted #8F8F8F; /* Windows White */
-    outline: solid;
-}
 #chat-submit {
     background-color: #C3C3C3; /* Light gray */
     color: #000; /* Black */
@@ -276,14 +262,14 @@ function createStyleSheet() {
     transition: background-color 0.3s;
     font-family: 'MS Sans Serif', 'Arial', sans-serif; /* Windows 95 font */
 }
-#chat-submit:focus {
+#chat-submit:focus, #chat-input:focus, #close-popup:focus {
     border-top: 2px dotted #8F8F8F; /* Windows Black */
     border-left: 2px dotted #8F8F8F; /* Windows Black */
     border-right: 2px dotted #8F8F8F; /* Windows White */
     border-bottom: 2px dotted #8F8F8F; /* Windows White */
     outline: solid;
 }
-#chat-submit:hover {
+#close-popup:hover,#chat-submit:hover {
     background-color: #808080; /* Dark gray */
 }
 #chat-input-container .text-center {
@@ -305,17 +291,18 @@ function createStyleSheet() {
 .message {
     background-color: #C3C3C3; /* WIndows Light gray */
     color: #000; /* Black */
+    border-top: 2px solid #F0F0F0; /* Windows White */
+    border-left: 2px solid #F0F0F0; /* Windows White */
+    border-right: 2px solid #111111; /* Windows Black */
+    border-bottom: 2px solid #111111; /* Windows Black */
     border-radius: 2px; /* Slightly rounded for Windows 95 look */
     padding: 0.5rem 1rem; /* Tailwind py-2 px-4 */
     max-width: 70%;
-    /*box-shadow: 2px 2px 5px #808080, -2px -2px 5px #FFFFFF; *//* Beveled effect */
     font-family: 'MS Sans Serif', 'Arial', sans-serif; /* Windows 95 font */
 }
 .message.reply {
     background-color: #FFFFFF; /* White */
     color: #000; /* Black */
-   /* box-shadow: 2px 2px 5px #FFFFFF, -2px -2px 5px #808080;*/ /* Beveled effect */
-   /* Base styles remain as provided */
 }`;
 
   document.head.appendChild(style);

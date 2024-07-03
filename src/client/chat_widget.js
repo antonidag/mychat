@@ -134,13 +134,18 @@ function createStyleSheet() {
  .hidden {
     display: none;
 }
+@font-face {
+  font-family: myFirstFont;
+  src: url(./fonts/MS_Sans_Serif_8pt.ttf);
+}
 #chat-widget-container {
     position: fixed;
     bottom: 20px;
     right: 20px;
     display: flex;
     flex-direction: column;
-    z-index:999
+    z-index:999;
+    font-family: myFirstFont;
 }
 #chat-bubble {
     width: 4rem;
@@ -194,7 +199,6 @@ function createStyleSheet() {
     padding: 0.5rem 1rem; 
     background-color: #000080; /* Navy blue */
     color: #fff; 
-    font-family: 'MS Sans Serif', 'Arial', sans-serif; /* Windows 95 font */
 }
 #chat-header h3 {
     margin: 0;
@@ -209,8 +213,6 @@ function createStyleSheet() {
     border-bottom: 2px solid #111111; /* Windows Black */
     cursor: pointer;
     transition: background-color 0.3s;
-    font-family: 'MS Sans Serif', 'Arial', sans-serif; /* Windows 95 font */
-    
 }
 #close-popup svg {
     height: 1rem;
@@ -247,7 +249,6 @@ function createStyleSheet() {
     outline: none;
     width: 75%; /* Tailwind w-3/4 */
     background-color: #FFFFFF; /* White */
-    font-family: 'MS Sans Serif', 'Arial', sans-serif; /* Windows 95 font */
 }
 #chat-submit {
     background-color: #C3C3C3; /* Light gray */
@@ -258,9 +259,7 @@ function createStyleSheet() {
     border-bottom: 2px solid #111111; /* Windows Black */
     padding: 0.5rem 1rem;
     cursor: pointer;
-    /*box-shadow: 2px 2px 5px #FFFFFF, -2px -2px 5px #808080; *//* Beveled effect */
     transition: background-color 0.3s;
-    font-family: 'MS Sans Serif', 'Arial', sans-serif; /* Windows 95 font */
 }
 #chat-submit:focus, #chat-input:focus, #close-popup:focus {
     border-top: 2px dotted #8F8F8F; /* Windows Black */
@@ -276,7 +275,6 @@ function createStyleSheet() {
     text-align: center;
     font-size: 0.75rem; 
     padding-top: 0.5rem;
-    font-family: 'MS Sans Serif', 'Arial', sans-serif; /* Windows 95 font */
 }
 .message-container {
     display: flex;
@@ -297,7 +295,6 @@ function createStyleSheet() {
     border-bottom: 2px solid #111111; /* Windows Black */
     padding: 0.5rem 1rem; /* Tailwind py-2 px-4 */
     max-width: 70%;
-    font-family: 'MS Sans Serif', 'Arial', sans-serif; /* Windows 95 font */
 }
 .message.reply {
     background-color: #FFFFFF; /* White */

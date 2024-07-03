@@ -136,8 +136,8 @@ function createStyleSheet() {
 }
 @font-face {
     font-family: 'Windows 95';
-    src: url('src/client/fonts/w-95-sans-serif.woff2') format('woff2'),
-        url('src/client/fonts/w-95-sans-serif.woff') format('woff');
+    src: url('https://antonidag.github.io/static-files/fonts/ms/w-95-sans-serif.woff2') format('woff2'),
+        url('https://antonidag.github.io/static-files/fonts/ms/w-95-sans-serif.woff') format('woff');
     font-weight: normal;
     font-style: normal;
 }

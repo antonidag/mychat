@@ -49,7 +49,7 @@
     }
   }
 
-  function onUserRequest(message) {
+  async function onUserRequest(message) {
     console.log('User request:', message);
 
     const messageElement = document.createElement('div');
@@ -63,9 +63,27 @@
     chatMessages.scrollTop = chatMessages.scrollHeight;
     chatInput.value = '';
 
-    setTimeout(function () {
-      reply('Hello! This is a sample reply.');
-    }, 1000);
+    const myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/json");
+
+    const raw = JSON.stringify({
+      "model": "qwen2:0.5b",
+      "prompt": message,
+      "stream": false
+    });
+
+    const requestOptions = {
+      method: "POST",
+      headers: myHeaders,
+      body: raw,
+      redirect: "follow"
+    };
+
+    console.log('Sending request')
+    const response = (await fetch("http://localhost:11434/api/generate", requestOptions));
+    const body = await response.json();
+    console.log({body});
+    reply(body.response)
   }
 
   function reply(message) {
@@ -117,7 +135,7 @@ function createStyleSheet() {
     color: #000; /* Black */
 }
 #chat-popup {
-    width: max-content;
+    width: 40vh;
     height: 70vh;
     max-height: 70vh;
     transition: all 0.3s;

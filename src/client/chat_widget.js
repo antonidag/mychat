@@ -295,7 +295,6 @@ function createStyleSheet() {
     border-left: 2px solid #F0F0F0; /* Windows White */
     border-right: 2px solid #111111; /* Windows Black */
     border-bottom: 2px solid #111111; /* Windows Black */
-    border-radius: 2px; /* Slightly rounded for Windows 95 look */
     padding: 0.5rem 1rem; /* Tailwind py-2 px-4 */
     max-width: 70%;
     font-family: 'MS Sans Serif', 'Arial', sans-serif; /* Windows 95 font */

@@ -12,12 +12,17 @@ app.use(express.urlencoded({ extended: true })); // Support URL-encoded bodies
 
 app.options('*', cors()); // Handle preflight requests for all routes
 
+/*
+To build next. 
+QDrant vector search with LLM. 
+
+*/
+
 app.post('/ai/chat', async (req, res) => {
     const message = { role: 'user', content: req.body.prompt };
     const response = await ollama.chat({ model: MODEL, messages: [message], stream: true });
     for await (const part of response) {
         res.write(part.message.content);
-        console.log(part.message.content);
     }
     res.end();
 });

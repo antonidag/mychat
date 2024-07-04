@@ -110,8 +110,6 @@ async function* promptAI(message) {
     redirect: "follow"
   };
 
-  console.log({ baseURL, requestOptions });
-
   try {
     const response = await fetch(baseURL, requestOptions);
 
@@ -133,7 +131,6 @@ async function* promptAI(message) {
       yield chunk;
     }
   } catch (error) {
-    console.error('Fetch error:', error);
     throw error;
   }
 }

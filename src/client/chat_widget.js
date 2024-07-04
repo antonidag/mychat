@@ -64,16 +64,13 @@
 
     const guidID = generateUUID()
 
-    const body = await promptAI(message);
-    reply(body.response, guidID)
-
-    /*
     let currentResponse = "";
-    const stream = await promptAI(message);
-      for chunk in stream
-        currentResponse += body.response;
-        reply(body.response, guidID)
-    */
+    const stream = promptAI(message);
+    for await (const chunk of stream) {
+      console.log('Received chunk:', chunk);
+      currentResponse += chunk;
+      reply(currentResponse, guidID)
+    }
   }
 
   function reply(message, guidID) {
@@ -89,14 +86,13 @@
   }
 })();
 
-async function promptAI(message) {
+async function* promptAI(message) {
+  const baseURL = 'http://localhost:8080/ai/chat';
   const myHeaders = new Headers();
   myHeaders.append("Content-Type", "application/json");
 
   const raw = JSON.stringify({
-    "model": "qwen2:0.5b",
     "prompt": message,
-    "stream": false
   });
 
   const requestOptions = {
@@ -106,9 +102,33 @@ async function promptAI(message) {
     redirect: "follow"
   };
 
-  const response = (await fetch("http://localhost:11434/api/generate", requestOptions));
-  const body = await response.json();
-  return body;
+  console.log({ baseURL, requestOptions });
+
+  try {
+    const response = await fetch(baseURL, requestOptions);
+
+    if (!response.body) {
+      throw new Error('ReadableStream not yet supported in this browser.');
+    }
+
+    const reader = response.body.getReader();
+    const decoder = new TextDecoder();
+
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) {
+        console.log('Stream complete');
+        break;
+      }
+
+      // Decode and yield the chunk
+      const chunk = decoder.decode(value, { stream: true });
+      yield chunk;
+    }
+  } catch (error) {
+    console.error('Fetch error:', error);
+    throw error;
+  }
 }
 
 function generateUUID() { // Public Domain/MIT

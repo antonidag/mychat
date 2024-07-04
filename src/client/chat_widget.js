@@ -63,27 +63,35 @@
 
 
     const guidID = generateUUID()
-
-    let currentResponse = "";
     const stream = promptAI(message);
     for await (const chunk of stream) {
-      console.log('Received chunk:', chunk);
-      currentResponse += chunk;
-      reply(currentResponse, guidID)
+      reply(chunk, guidID)
     }
   }
 
   function reply(message, guidID) {
-    const replyElement = document.createElement('div');
-    replyElement.className = 'message-container reply';
-    replyElement.innerHTML = `
-      <div class="message reply" id="${guidID}">
-        ${message}
-      </div>
-    `;
-    chatMessages.appendChild(replyElement);
+    // Try to find the existing div with the given guidID
+    const existingDiv = document.getElementById(guidID);
+
+    if (existingDiv) {
+      // If found, update the innerHTML with the new message
+      existingDiv.innerHTML = existingDiv.innerHTML + message;
+    } else {
+      // If not found, create a new div and append it to chatMessages
+      const replyElement = document.createElement('div');
+      replyElement.className = 'message-container reply';
+      replyElement.innerHTML = `
+        <div class="message reply" id="${guidID}">
+          ${message}
+        </div>
+      `;
+      chatMessages.appendChild(replyElement);
+    }
+
+    // Scroll to the bottom of the chatMessages container
     chatMessages.scrollTop = chatMessages.scrollHeight;
   }
+
 })();
 
 async function* promptAI(message) {
@@ -117,7 +125,6 @@ async function* promptAI(message) {
     while (true) {
       const { done, value } = await reader.read();
       if (done) {
-        console.log('Stream complete');
         break;
       }
 

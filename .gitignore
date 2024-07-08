@@ -1,3 +1,6 @@
 node_modules
 windows-95-ui-kit
 __
+src/server/qdrant_data/.lock
+src/server/qdrant_data/meta.json
+src/server/__pycache__/app.cpython-311.pyc

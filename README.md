@@ -13,6 +13,7 @@ Welcome to My AI Chat, this project aims to integrate AI widgets and assistants 
 ### Backend
 - **Python🐍**
 - **HTTP Flask Server**
+- **DVector**
 ### Large Language Model
 - **Ollama🦙:** A tool for managing AI-related functionalities.
 - **Model:** Phi-3 Microsoft Open Source

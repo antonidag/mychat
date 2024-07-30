@@ -1,5 +1,5 @@
 from flask import Flask, jsonify
-from flask import request,Response,make_response
+from flask import request,Response,stream_with_context
 from flask_cors import CORS
 from llama_index.core import (
     VectorStoreIndex,
@@ -54,15 +54,18 @@ def chat():
         return jsonify({'error': 'Missing collection name in headers'}), 400
     if not query_text:
         return jsonify({'error': 'Missing query text in request data'}), 400
+    
     vector_store = QdrantVectorStore(client=client, collection_name=collection)
-
     index = VectorStoreIndex.from_vector_store(vector_store=vector_store, service_context=service_context)
     # Query the index
-    query_engine = index.as_query_engine(streaming=False)
-    response = query_engine.query(query_text)
-    print(response)
-    response_str = str(response) if not isinstance(response, str) else response
-    return Response(response_str, status=200, mimetype='text/plain')
+    query_engine = index.as_query_engine(streaming=True)
+    stream_response = query_engine.query(query_text)
+    def stream_query_results():
+        for text in stream_response.response_gen:
+            yield text
+
+    # Return a streaming response to the client
+    return Response(stream_query_results(), content_type='text/plain')
     
 
 @app.route('/ai/import', methods=['POST'])

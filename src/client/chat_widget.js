@@ -86,7 +86,7 @@
       replyElement.className = 'message-container reply';
       replyElement.innerHTML = `
         <div class="message reply" id="${guidID}">
-          <img id="${guidID}-spinner" src="./src/client/windows_spinner.gif" alt="Windows spinner" style="display:block;" width="35" height="35" st>
+          <img id="${guidID}-spinner" src="https://antonidag.github.io/static-files/windows_spinner.gif" alt="Windows spinner" style="display:block;" width="35" height="35" st>
           ${message}
         </div>
       `;

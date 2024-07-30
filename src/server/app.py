@@ -13,11 +13,10 @@ collections = ["blog"]
 
 app = Flask(__name__)
 CORS(app)  # Apply CORS middleware
-
+PORT = 27415
 
 MODEL = "qwen2:0.5b"
 # Initialize the LLM with the specified model and timeout
-
 llm = Ollama(model=MODEL, request_timeout=1000.0)
 # Provide a model name for the HuggingFaceEmbedding
 embedding_model = HuggingFaceEmbedding(
@@ -79,7 +78,10 @@ def import_data():
         return jsonify({"error": "Missing collection name in headers"}), 400
     ## Create a document from the request body JSON data
     document = Document(
-        doc_id="test", text=json.dumps(data), mimetype="application/json"
+        doc_id="test",
+        text=json.dumps(data),
+        mimetype="application/json",
+        metadata={"filename": "<doc_file_name>", "category": "<category>"},
     )
 
     ## Store data directly into the vector store
@@ -99,4 +101,4 @@ def import_data():
 
 
 if __name__ == "__main__":
-    app.run(port=8080)
+    app.run(port=PORT)

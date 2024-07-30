@@ -52,13 +52,7 @@ def chat():
     if not query_text:
         return jsonify({"error": "Missing query text in request data"}), 400
 
-    vector_store = QdrantVectorStore(client=client, collection_name=collection)
-    index = VectorStoreIndex.from_vector_store(
-        vector_store=vector_store, service_context=service_context
-    )
-    # Query the index
-    query_engine = index.as_query_engine(streaming=True)
-    stream_response = query_engine.query(query_text)
+    stream_response = query_index(collection, query_text)
 
     def stream_query_results():
         for text in stream_response.response_gen:
@@ -68,36 +62,66 @@ def chat():
     return Response(stream_query_results(), content_type="text/plain")
 
 
-@app.route("/ai/import", methods=["POST"])
-def import_data():
-    # Get the collection from the headers and the query text from the request data
-    collection = request.headers.get("ce-topic")
-    data = request.get_json()  # Use get_json to parse JSON data
-    # Null check for collection and query_text
-    if not check_collection_exists(element=collection, collection=collections):
-        return jsonify({"error": "Missing collection name in headers"}), 400
-    ## Create a document from the request body JSON data
-    document = Document(
-        doc_id="test",
-        text=json.dumps(data),
-        mimetype="application/json",
-        metadata={"filename": "<doc_file_name>", "category": "<category>"},
+def query_index(collection, query_text):
+    vector_store = QdrantVectorStore(client=client, collection_name=collection)
+    index = VectorStoreIndex.from_vector_store(
+        vector_store=vector_store, service_context=service_context
     )
+    query_engine = index.as_query_engine(streaming=True)
+    stream_response = query_engine.query(query_text)
+    return stream_response
 
+
+def store_index(document, collection):
     ## Store data directly into the vector store
-    print("Storing data in the vector base")
     vector_store = QdrantVectorStore(client=client, collection_name=collection)
 
     # Assuming StorageContext and VectorStoreIndex are correctly implemented and integrated
     storage_context = StorageContext.from_defaults(vector_store=vector_store)
 
     # Create the index with the single document
-    print("Creating index on the document")
     index = VectorStoreIndex.from_documents(
         [document], service_context=service_context, storage_context=storage_context
     )
+    return True
 
-    return jsonify({"message": "Data imported and stored in vector base"}), 200
+
+@app.route("/ai/import", methods=["POST"])
+def import_data():
+    # Get the collection from the headers and the query text from the request data
+    collection = request.headers.get("ce-topic")
+    document_id = request.headers.get("ce-id")
+    # Null check for collection and query_text
+    if not check_collection_exists(element=collection, collection=collections):
+        return jsonify({"error": "Missing collection name in headers"}), 400
+
+    meta_data = request.headers.get("ce-metadata")
+    document = {}
+    content_type = request.headers.get("Content-Type")
+    if content_type == "application/json":
+        data = request.get_json()
+        document = Document(
+            doc_id=document_id,
+            text=json.dumps(data),
+            mimetype="application/json",
+            metadata=json.loads(meta_data),
+        )
+    elif content_type == "text/plain":
+        data = request.get_data()
+        document = Document(
+            doc_id=document_id,
+            text=data,
+            mimetype="text/plain",
+            metadata=json.loads(meta_data),
+        )
+    else:
+        return jsonify({"message": "Missing HTTP header Content-Type"}), 400
+
+    ## Create a document from the request body JSON data
+
+    if store_index(document=document, collection=collection):
+        return jsonify({"message": "Data imported and stored in vector base"}), 200
+    return jsonify({"message": "Data was not imported to vector base"}), 500
 
 
 if __name__ == "__main__":

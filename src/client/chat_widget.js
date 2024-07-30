@@ -63,7 +63,7 @@
 
 
     const guidID = generateUUID()
-    const stream = promptAI(message);
+    const stream = promptAI(message, collection);
     for await (const chunk of stream) {
       reply(chunk, guidID)
     }
@@ -94,10 +94,11 @@
 
 })();
 
-async function* promptAI(message) {
+async function* promptAI(message, collection) {
   const baseURL = 'http://localhost:8080/ai/chat';
   const myHeaders = new Headers();
   myHeaders.append("Content-Type", "application/json");
+  myHeaders.append("ce-topic", collection)
 
   const raw = JSON.stringify({
     "prompt": message,

@@ -61,8 +61,8 @@
     chatMessages.scrollTop = chatMessages.scrollHeight;
     chatInput.value = '';
 
-
     const guidID = generateUUID()
+    reply("", guidID)
     const stream = promptAI(message, collection);
     for await (const chunk of stream) {
       reply(chunk, guidID)
@@ -72,7 +72,11 @@
   function reply(message, guidID) {
     // Try to find the existing div with the given guidID
     const existingDiv = document.getElementById(guidID);
-
+    const spinner = document.getElementById(`${guidID}-spinner`)
+    if (message.length > 0) {
+      // Hide spinner
+      spinner.style.display = 'none';
+    }
     if (existingDiv) {
       // If found, update the innerHTML with the new message
       existingDiv.innerHTML = existingDiv.innerHTML + message;
@@ -82,6 +86,7 @@
       replyElement.className = 'message-container reply';
       replyElement.innerHTML = `
         <div class="message reply" id="${guidID}">
+          <img id="${guidID}-spinner" src="./src/client/windows_spinner.gif" alt="Windows spinner" style="display:block;" width="35" height="35" st>
           ${message}
         </div>
       `;
@@ -95,7 +100,7 @@
 })();
 
 async function* promptAI(message, collection) {
-  const baseURL = 'http://localhost:8080/ai/chat';
+  const baseURL = 'http://localhost:27415/ai/chat';
   const myHeaders = new Headers();
   myHeaders.append("Content-Type", "application/json");
   myHeaders.append("ce-topic", collection)
@@ -368,6 +373,5 @@ function createHTMLWidget(chatName) {
       </div>
     </div>
   `;
-
 }
 //#endregion

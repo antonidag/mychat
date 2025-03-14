@@ -7,6 +7,7 @@ from llama_index.vector_stores.qdrant import QdrantVectorStore
 from llama_index.embeddings.huggingface import HuggingFaceEmbedding
 from llama_index.llms.ollama import Ollama
 import json
+import base64
 
 
 collections = ["blog"]
@@ -45,6 +46,7 @@ def chat():
     collection = request.headers.get("ce-topic")
     query_data = request.get_json()  # Use get_json to parse JSON data
     query_text = query_data.get("prompt") if query_data else None
+    
 
     # Null check for collection and query_text
     if not check_collection_exists(element=collection, collection=collections):
@@ -52,6 +54,12 @@ def chat():
     if not query_text:
         return jsonify({"error": "Missing query text in request data"}), 400
 
+    
+    if(collection == "blog"):
+       pre_prompt = f"Context for the question. Article/blog post: {collection}" 
+    
+    
+    
     stream_response = query_index(collection, query_text)
 
     def stream_query_results():
@@ -75,7 +83,6 @@ def query_index(collection, query_text):
 def store_index(document, collection):
     ## Store data directly into the vector store
     vector_store = QdrantVectorStore(client=client, collection_name=collection)
-
     # Assuming StorageContext and VectorStoreIndex are correctly implemented and integrated
     storage_context = StorageContext.from_defaults(vector_store=vector_store)
 
@@ -90,29 +97,39 @@ def store_index(document, collection):
 def import_data():
     # Get the collection from the headers and the query text from the request data
     collection = request.headers.get("ce-topic")
-    document_id = request.headers.get("ce-id")
+    
     # Null check for collection and query_text
     if not check_collection_exists(element=collection, collection=collections):
         return jsonify({"error": "Missing collection name in headers"}), 400
 
+    ce_id = request.headers.get("ce-id")
+    if ce_id is None: 
+        return jsonify({"error": "Missing ce-id in headers"}), 400
+        
     meta_data = request.headers.get("ce-metadata")
+    if meta_data is None:
+        # Set the base64 str to {}
+        meta_data = "e30="
+
+
+    decoded_meta_data = base64.b64decode(meta_data)
     document = {}
     content_type = request.headers.get("Content-Type")
     if content_type == "application/json":
         data = request.get_json()
         document = Document(
-            doc_id=document_id,
+            doc_id=ce_id,
             text=json.dumps(data),
             mimetype="application/json",
-            metadata=json.loads(meta_data),
+            metadata=json.loads(decoded_meta_data),
         )
     elif content_type == "text/plain":
         data = request.get_data()
         document = Document(
-            doc_id=document_id,
+            doc_id=ce_id,
             text=data,
             mimetype="text/plain",
-            metadata=json.loads(meta_data),
+            metadata=json.loads(decoded_meta_data),
         )
     else:
         return jsonify({"message": "Missing HTTP header Content-Type"}), 400
